@@ -2,7 +2,7 @@ import { parseArguments } from "./parseArguments.js";
 import readline from "readline";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { homedir } from "os";
+import { homedir, EOL, userInfo, arch, cpus } from "os";
 import { readdir } from "fs/promises";
 
 // npm run start -- --username=ASDFGH
@@ -52,6 +52,36 @@ rl.on("line", (input) => {
       console.table(list);
     });
     console.log(`You are currently in ${__dirname}`);
+  } else if (input.startsWith("os ")) {
+    const command = input.split(" ")[1].slice(2);
+
+    switch (command) {
+      case "EOL":
+        console.log(EOL);
+        break;
+      case "cpus":
+        const processors = [];
+        cpus().forEach((cpu) => {
+          const model = cpu.model;
+          const clockrate = `${cpu.speed / 1000}GHz`;
+          processors.push({ model, clockrate });
+        });
+
+        console.table(processors);
+        break;
+      case "homedir":
+        console.log(homedir());
+        break;
+      case "username":
+        console.log(userInfo().username);
+        break;
+      case "architecture":
+        console.log(arch());
+        break;
+      default:
+        console.log("Invalid input");
+        break;
+    }
   } else {
     console.log("Invalid input");
   }
