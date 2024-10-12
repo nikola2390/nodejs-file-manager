@@ -85,18 +85,12 @@ rl.on("line", (input) => {
         break;
     }
   } else if (input === "up") {
-    let dirnamePath = __dirname;
-    let dirnamePathParsed = dirnamePath.split("\\");
-
-    if (dirnamePathParsed.length !== 1) {
-      dirnamePathParsed.pop();
-      if (dirnamePathParsed.length === 1) {
-        dirnamePathParsed[0] = `${dirnamePathParsed[0]}\\`;
-      }
-      let newPath = path.join(...dirnamePathParsed);
-      process.chdir(newPath);
-      __dirname = newPath;
+    try {
+      process.chdir("..");
+    } catch (error) {
+      console.error("Operation failed");
     }
+    __dirname = process.cwd();
     console.log(`You are currently in ${__dirname}`);
   } else if (input.startsWith("cd ")) {
     let destinationPath = input.split(" ")[1];
