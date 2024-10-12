@@ -29,13 +29,14 @@ console.log(`You are currently in ${__dirname}`);
 rl.on("line", (input) => {
   if (input === ".exit") {
     closeFileManager();
-  }
-  if (input === "ls") {
+  } else if (input === "ls") {
     console.log("list");
     readdir(__dirname).then((data) => {
       console.log(data);
     });
     console.log(`You are currently in ${__dirname}`);
+  } else {
+    console.log("Invalid input");
   }
 });
 
