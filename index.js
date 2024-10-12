@@ -4,6 +4,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { homedir, EOL, userInfo, arch, cpus } from "os";
 import { readdir } from "fs/promises";
+import path from "path";
 
 // npm run start -- --username=ASDFGH
 
@@ -15,7 +16,7 @@ const rl = readline.createInterface({
 
 const home = homedir();
 // const __dirname = dirname(fileURLToPath(import.meta.url));
-const __dirname = home;
+let __dirname = home;
 
 process.chdir(home);
 
@@ -50,6 +51,7 @@ rl.on("line", (input) => {
       });
 
       console.table(list);
+      console.log(`You are currently in ${__dirname}`);
     });
     console.log(`You are currently in ${__dirname}`);
   } else if (input.startsWith("os ")) {
@@ -82,6 +84,20 @@ rl.on("line", (input) => {
         console.log("Invalid input");
         break;
     }
+  } else if (input === "up") {
+    let dirnamePath = __dirname;
+    let dirnamePathParsed = dirnamePath.split("\\");
+
+    if (dirnamePathParsed.length !== 1) {
+      dirnamePathParsed.pop();
+      if (dirnamePathParsed.length === 1) {
+        dirnamePathParsed[0] = `${dirnamePathParsed[0]}\\`;
+      }
+      let newPath = path.join(...dirnamePathParsed);
+      process.chdir(newPath);
+      __dirname = newPath;
+    }
+    console.log(`You are currently in ${__dirname}`);
   } else {
     console.log("Invalid input");
   }
