@@ -98,6 +98,16 @@ rl.on("line", (input) => {
       __dirname = newPath;
     }
     console.log(`You are currently in ${__dirname}`);
+  } else if (input.startsWith("cd ")) {
+    let destinationPath = input.split(" ")[1];
+
+    try {
+      process.chdir(destinationPath);
+    } catch (error) {
+      console.error("Operation failed");
+    }
+    __dirname = process.cwd();
+    console.log(`You are currently in ${__dirname}`);
   } else {
     console.log("Invalid input");
   }
