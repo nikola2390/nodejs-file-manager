@@ -8,6 +8,7 @@ import path from "path";
 import { calculateHash } from "./calcHash.js";
 import { compress } from "./compress.js";
 import { decompress } from "./decompress.js";
+import { read } from "./read.js";
 
 // npm run start -- --username=ASDFGH
 
@@ -141,6 +142,17 @@ rl.on("line", async (input) => {
 
     try {
       await decompress(filePath, destinationPath);
+    } catch (error) {
+      console.error("Operation failed");
+    }
+    console.log(`You are currently in ${__dirname}`);
+  } else if (input.startsWith("cat ")) {
+    const filePath = path.isAbsolute(input.split(" ")[1])
+      ? input.split(" ")[1]
+      : path.join(__dirname, input.split(" ")[1]);
+
+    try {
+      await read(filePath);
     } catch (error) {
       console.error("Operation failed");
     }
