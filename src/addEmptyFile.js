@@ -1,5 +1,6 @@
 import { open } from "node:fs/promises";
 
 export const addEmptyFile = async (filePath) => {
-  await open(filePath, "wx");
+  const fileHandle = await open(filePath, "wx");
+  await fileHandle.close();
 };
