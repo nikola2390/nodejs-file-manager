@@ -6,6 +6,7 @@ import { homedir, EOL, userInfo, arch, cpus } from "os";
 import { readdir } from "fs/promises";
 import path from "path";
 import { calculateHash } from "./calcHash.js";
+import { compress } from "./compress.js";
 
 // npm run start -- --username=ASDFGH
 
@@ -111,6 +112,20 @@ rl.on("line", async (input) => {
       } else {
         await calculateHash(path.join(__dirname, filePath));
       }
+    } catch (error) {
+      console.error("Operation failed");
+    }
+    console.log(`You are currently in ${__dirname}`);
+  } else if (input.startsWith("compress ")) {
+    const filePath = path.isAbsolute(input.split(" ")[1])
+      ? input.split(" ")[1]
+      : path.join(__dirname, input.split(" ")[1]);
+    const destinationPath = path.isAbsolute(input.split(" ")[2])
+      ? input.split(" ")[2]
+      : path.join(__dirname, input.split(" ")[2]);
+
+    try {
+      await compress(filePath, destinationPath);
     } catch (error) {
       console.error("Operation failed");
     }
