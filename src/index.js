@@ -9,6 +9,7 @@ import { calculateHash } from "./calcHash.js";
 import { compress } from "./compress.js";
 import { decompress } from "./decompress.js";
 import { read } from "./read.js";
+import { addEmptyFile } from "./addEmptyFile.js";
 
 // npm run start -- --username=ASDFGH
 
@@ -153,6 +154,16 @@ rl.on("line", async (input) => {
 
     try {
       await read(filePath);
+    } catch (error) {
+      console.error("Operation failed");
+    }
+    console.log(`You are currently in ${__dirname}`);
+  } else if (input.startsWith("add ")) {
+    const fileName = input.split(" ")[1];
+    const filePath = path.join(__dirname, fileName);
+
+    try {
+      await addEmptyFile(filePath);
     } catch (error) {
       console.error("Operation failed");
     }
