@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { homedir, EOL, userInfo, arch, cpus } from "os";
 import { readdir } from "fs/promises";
 import path from "path";
+import { calculateHash } from "./calcHash.js";
 
 // npm run start -- --username=ASDFGH
 
@@ -28,7 +29,7 @@ const closeFileManager = () => {
 console.log(`Welcome to the File Manager, ${username}!`);
 console.log(`You are currently in ${__dirname}`);
 
-rl.on("line", (input) => {
+rl.on("line", async (input) => {
   if (input === ".exit") {
     closeFileManager();
   } else if (input === "ls") {
@@ -101,6 +102,18 @@ rl.on("line", (input) => {
       console.error("Operation failed");
     }
     __dirname = process.cwd();
+    console.log(`You are currently in ${__dirname}`);
+  } else if (input.startsWith("hash ")) {
+    let filePath = input.split(" ")[1];
+    try {
+      if (path.isAbsolute(filePath)) {
+        await calculateHash(filePath);
+      } else {
+        await calculateHash(path.join(__dirname, filePath));
+      }
+    } catch (error) {
+      console.error("Operation failed");
+    }
     console.log(`You are currently in ${__dirname}`);
   } else {
     console.log("Invalid input");
