@@ -2,20 +2,23 @@ import { homedir } from "node:os";
 import path from "node:path";
 import readline from "node:readline";
 
-import { parseArguments } from "./parseArguments.js";
-import { calculateHash } from "./calcHash.js";
-import { compress } from "./compress.js";
-import { decompress } from "./decompress.js";
-import { read } from "./read.js";
-import { addEmptyFile } from "./addEmptyFile.js";
-import { renameFile } from "./renameFile.js";
-import { copyFile } from "./copyFile.js";
-import { removeFile } from "./removeFile.js";
-import { moveFile } from "./moveFile.js";
-import { operationSystemInfo } from "./operationSystemInfo.js";
-import { list } from "./list.js";
-import { parseInput } from "./parseInput.js";
-import { generatePath } from "./generatePath.js";
+import {
+  parseArguments,
+  parseInput,
+  generatePath,
+} from "./src/helpers/index.js";
+import { calculateHash } from "./src/hash/calcHash.js";
+import { compress, decompress } from "./src/zlib/index.js";
+import { operationSystemInfo } from "./src/operating-system/index.js";
+import { list } from "./src/working-directory/index.js";
+import {
+  addEmptyFile,
+  copyFile,
+  moveFile,
+  read,
+  removeFile,
+  renameFile,
+} from "./src/file-system/index.js";
 
 const { username } = parseArguments(process.argv);
 const rl = readline.createInterface({
