@@ -1,7 +1,6 @@
 import { parseArguments } from "./parseArguments.js";
 import readline from "node:readline";
 import { homedir } from "node:os";
-import { readdir } from "node:fs/promises";
 import path from "node:path";
 import { calculateHash } from "./calcHash.js";
 import { compress } from "./compress.js";
@@ -13,6 +12,7 @@ import { copyFile } from "./copyFile.js";
 import { removeFile } from "./removeFile.js";
 import { moveFile } from "./moveFile.js";
 import { operationSystemInfo } from "./operationSystemInfo.js";
+import { list } from "./list.js";
 
 // npm run start -- --username=ASDFGH
 
@@ -37,27 +37,12 @@ rl.on("line", async (input) => {
   if (input === ".exit") {
     closeFileManager();
   } else if (input === "ls") {
-    readdir(__dirname, { withFileTypes: true }).then((data) => {
-      const list = [];
-      data.forEach((element) => {
-        const name = element.name;
-        const type = element.isDirectory()
-          ? "directory"
-          : element.isFile()
-          ? "file"
-          : element.isSymbolicLink()
-          ? "symbolic link"
-          : "unknown";
-        list.push({ name, type });
-      });
+    try {
+      await list(__dirname);
+    } catch (error) {
+      console.error("Operation failed");
+    }
 
-      list.sort((a, b) => {
-        return a.type.localeCompare(b.type) || a.name.localeCompare(b.name);
-      });
-
-      console.table(list);
-      console.log(`You are currently in ${__dirname}`);
-    });
     console.log(`You are currently in ${__dirname}`);
   } else if (input.startsWith("os ")) {
     const command = input.split(" ")[1].slice(2);
