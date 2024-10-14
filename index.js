@@ -165,6 +165,7 @@ rl.on("line", async (data) => {
     console.log(`You are currently in ${__dirname}`);
   } else {
     console.log("Invalid input");
+    console.log(`You are currently in ${__dirname}`);
   }
 });
 
