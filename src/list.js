@@ -21,6 +21,5 @@ export const list = async (dirname) => {
     });
 
     console.table(list);
-    // console.log(`You are currently in ${__dirname}`);
   });
 };
