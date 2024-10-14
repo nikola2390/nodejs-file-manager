@@ -22,12 +22,9 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+let __dirname = homedir();
 
-const home = homedir();
-// const __dirname = dirname(fileURLToPath(import.meta.url));
-let __dirname = home;
-
-process.chdir(home);
+process.chdir(__dirname);
 
 const closeFileManager = () => {
   console.log(`Thank you for using File Manager, ${username}, goodbye!`);
