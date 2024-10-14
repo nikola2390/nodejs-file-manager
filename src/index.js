@@ -10,6 +10,7 @@ import { compress } from "./compress.js";
 import { decompress } from "./decompress.js";
 import { read } from "./read.js";
 import { addEmptyFile } from "./addEmptyFile.js";
+import { renameFile } from "./renameFile.js";
 
 // npm run start -- --username=ASDFGH
 
@@ -164,6 +165,19 @@ rl.on("line", async (input) => {
 
     try {
       await addEmptyFile(filePath);
+    } catch (error) {
+      console.error("Operation failed");
+    }
+    console.log(`You are currently in ${__dirname}`);
+  } else if (input.startsWith("rn ")) {
+    const oldPath = path.isAbsolute(input.split(" ")[1])
+      ? input.split(" ")[1]
+      : path.join(__dirname, input.split(" ")[1]);
+    const newFileName = input.split(" ")[2];
+    const newPath = path.join(path.parse(oldPath).dir, newFileName);
+
+    try {
+      await renameFile(oldPath, newPath);
     } catch (error) {
       console.error("Operation failed");
     }
