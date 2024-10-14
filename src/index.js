@@ -14,8 +14,6 @@ import { moveFile } from "./moveFile.js";
 import { operationSystemInfo } from "./operationSystemInfo.js";
 import { list } from "./list.js";
 
-// npm run start -- --username=ASDFGH
-
 const { username } = parseArguments(process.argv);
 const rl = readline.createInterface({
   input: process.stdin,
@@ -44,7 +42,7 @@ rl.on("line", async (input) => {
     }
 
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("os ")) {
+  } else if (input.trim().startsWith("os ")) {
     const command = input.split(" ")[1].slice(2);
 
     try {
@@ -60,7 +58,7 @@ rl.on("line", async (input) => {
     }
     __dirname = process.cwd();
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("cd ")) {
+  } else if (input.trim().startsWith("cd ")) {
     let destinationPath = input.split(" ")[1];
 
     try {
@@ -70,7 +68,7 @@ rl.on("line", async (input) => {
     }
     __dirname = process.cwd();
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("hash ")) {
+  } else if (input.trim().startsWith("hash ")) {
     let filePath = input.split(" ")[1];
     try {
       if (path.isAbsolute(filePath)) {
@@ -82,7 +80,7 @@ rl.on("line", async (input) => {
       console.error("Operation failed");
     }
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("compress ")) {
+  } else if (input.trim().startsWith("compress ")) {
     const filePath = path.isAbsolute(input.split(" ")[1])
       ? input.split(" ")[1]
       : path.join(__dirname, input.split(" ")[1]);
@@ -96,7 +94,7 @@ rl.on("line", async (input) => {
       console.error("Operation failed");
     }
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("decompress ")) {
+  } else if (input.trim().startsWith("decompress ")) {
     const filePath = path.isAbsolute(input.split(" ")[1])
       ? input.split(" ")[1]
       : path.join(__dirname, input.split(" ")[1]);
@@ -110,7 +108,7 @@ rl.on("line", async (input) => {
       console.error("Operation failed");
     }
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("cat ")) {
+  } else if (input.trim().startsWith("cat ")) {
     const filePath = path.isAbsolute(input.split(" ")[1])
       ? input.split(" ")[1]
       : path.join(__dirname, input.split(" ")[1]);
@@ -121,7 +119,7 @@ rl.on("line", async (input) => {
       console.error("Operation failed");
     }
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("add ")) {
+  } else if (input.trim().startsWith("add ")) {
     const fileName = input.split(" ")[1];
     const filePath = path.join(__dirname, fileName);
 
@@ -131,7 +129,7 @@ rl.on("line", async (input) => {
       console.error("Operation failed");
     }
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("rn ")) {
+  } else if (input.trim().startsWith("rn ")) {
     const oldPath = path.isAbsolute(input.split(" ")[1])
       ? input.split(" ")[1]
       : path.join(__dirname, input.split(" ")[1]);
@@ -144,7 +142,7 @@ rl.on("line", async (input) => {
       console.error("Operation failed");
     }
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("cp ")) {
+  } else if (input.trim().startsWith("cp ")) {
     const filePath = path.isAbsolute(input.split(" ")[1])
       ? input.split(" ")[1]
       : path.join(__dirname, input.split(" ")[1]);
@@ -159,7 +157,7 @@ rl.on("line", async (input) => {
       console.error("Operation failed");
     }
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("rm ")) {
+  } else if (input.trim().startsWith("rm ")) {
     const filePath = path.isAbsolute(input.split(" ")[1])
       ? input.split(" ")[1]
       : path.join(__dirname, input.split(" ")[1]);
@@ -170,7 +168,7 @@ rl.on("line", async (input) => {
       console.error("Operation failed");
     }
     console.log(`You are currently in ${__dirname}`);
-  } else if (input.startsWith("mv ")) {
+  } else if (input.trim().startsWith("mv ")) {
     const filePath = path.isAbsolute(input.split(" ")[1])
       ? input.split(" ")[1]
       : path.join(__dirname, input.split(" ")[1]);
