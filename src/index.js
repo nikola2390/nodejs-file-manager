@@ -27,11 +27,13 @@ let __dirname = homedir();
 process.chdir(__dirname);
 
 const closeFileManager = () => {
-  console.log(`Thank you for using File Manager, ${username}, goodbye!`);
+  console.log(
+    `Thank you for using File Manager, ${username ?? "Guest"}, goodbye!`
+  );
   rl.close();
 };
 
-console.log(`Welcome to the File Manager, ${username}!`);
+console.log(`Welcome to the File Manager, ${username ?? "Guest"}!`);
 console.log(`You are currently in ${__dirname}`);
 
 rl.on("line", async (input) => {
