@@ -2,7 +2,7 @@ import { homedir, EOL, userInfo, arch, cpus } from "node:os";
 
 export const operationSystemInfo = (command) => {
   switch (command) {
-    case "EOL":
+    case "eol":
       console.log(EOL);
       break;
     case "cpus":
