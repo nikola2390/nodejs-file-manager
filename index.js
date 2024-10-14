@@ -39,7 +39,9 @@ const closeFileManager = () => {
 console.log(`Welcome to the File Manager, ${username ?? "Guest"}!`);
 console.log(`You are currently in ${__dirname}`);
 
-rl.on("line", async (input) => {
+rl.on("line", async (data) => {
+  const input = data.trim().toLowerCase();
+
   if (input === ".exit") {
     closeFileManager();
   } else if (input === "ls") {
