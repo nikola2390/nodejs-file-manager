@@ -1,8 +1,6 @@
 import { parseArguments } from "./parseArguments.js";
 import readline from "node:readline";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { homedir, EOL, userInfo, arch, cpus } from "node:os";
+import { homedir } from "node:os";
 import { readdir } from "node:fs/promises";
 import path from "node:path";
 import { calculateHash } from "./calcHash.js";
@@ -14,6 +12,7 @@ import { renameFile } from "./renameFile.js";
 import { copyFile } from "./copyFile.js";
 import { removeFile } from "./removeFile.js";
 import { moveFile } from "./moveFile.js";
+import { operationSystemInfo } from "./operationSystemInfo.js";
 
 // npm run start -- --username=ASDFGH
 
@@ -63,32 +62,10 @@ rl.on("line", async (input) => {
   } else if (input.startsWith("os ")) {
     const command = input.split(" ")[1].slice(2);
 
-    switch (command) {
-      case "EOL":
-        console.log(EOL);
-        break;
-      case "cpus":
-        const processors = [];
-        cpus().forEach((cpu) => {
-          const model = cpu.model;
-          const clockrate = `${cpu.speed / 1000}GHz`;
-          processors.push({ model, clockrate });
-        });
-
-        console.table(processors);
-        break;
-      case "homedir":
-        console.log(homedir());
-        break;
-      case "username":
-        console.log(userInfo().username);
-        break;
-      case "architecture":
-        console.log(arch());
-        break;
-      default:
-        console.log("Invalid input");
-        break;
+    try {
+      operationSystemInfo(command);
+    } catch (error) {
+      console.error("Operation failed");
     }
   } else if (input === "up") {
     try {
