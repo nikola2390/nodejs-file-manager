@@ -1,7 +1,8 @@
-import { parseArguments } from "./parseArguments.js";
-import readline from "node:readline";
 import { homedir } from "node:os";
 import path from "node:path";
+import readline from "node:readline";
+
+import { parseArguments } from "./parseArguments.js";
 import { calculateHash } from "./calcHash.js";
 import { compress } from "./compress.js";
 import { decompress } from "./decompress.js";
@@ -13,6 +14,8 @@ import { removeFile } from "./removeFile.js";
 import { moveFile } from "./moveFile.js";
 import { operationSystemInfo } from "./operationSystemInfo.js";
 import { list } from "./list.js";
+import { parseInput } from "./parseInput.js";
+import { generatePath } from "./generatePath.js";
 
 const { username } = parseArguments(process.argv);
 const rl = readline.createInterface({
@@ -43,13 +46,14 @@ rl.on("line", async (input) => {
 
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("os ")) {
-    const command = input.split(" ")[1].slice(2);
+    const [_, command] = parseInput(input);
 
     try {
       operationSystemInfo(command);
     } catch (error) {
       console.error("Operation failed");
     }
+    console.log(`You are currently in ${__dirname}`);
   } else if (input === "up") {
     try {
       process.chdir("..");
@@ -59,7 +63,7 @@ rl.on("line", async (input) => {
     __dirname = process.cwd();
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("cd ")) {
-    let destinationPath = input.split(" ")[1];
+    const [destinationPath] = generatePath(__dirname, input);
 
     try {
       process.chdir(destinationPath);
@@ -69,24 +73,15 @@ rl.on("line", async (input) => {
     __dirname = process.cwd();
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("hash ")) {
-    let filePath = input.split(" ")[1];
+    let [filePath] = generatePath(__dirname, input);
     try {
-      if (path.isAbsolute(filePath)) {
-        await calculateHash(filePath);
-      } else {
-        await calculateHash(path.join(__dirname, filePath));
-      }
+      await calculateHash(filePath);
     } catch (error) {
       console.error("Operation failed");
     }
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("compress ")) {
-    const filePath = path.isAbsolute(input.split(" ")[1])
-      ? input.split(" ")[1]
-      : path.join(__dirname, input.split(" ")[1]);
-    const destinationPath = path.isAbsolute(input.split(" ")[2])
-      ? input.split(" ")[2]
-      : path.join(__dirname, input.split(" ")[2]);
+    const [filePath, destinationPath] = generatePath(__dirname, input);
 
     try {
       await compress(filePath, destinationPath);
@@ -95,12 +90,7 @@ rl.on("line", async (input) => {
     }
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("decompress ")) {
-    const filePath = path.isAbsolute(input.split(" ")[1])
-      ? input.split(" ")[1]
-      : path.join(__dirname, input.split(" ")[1]);
-    const destinationPath = path.isAbsolute(input.split(" ")[2])
-      ? input.split(" ")[2]
-      : path.join(__dirname, input.split(" ")[2]);
+    const [filePath, destinationPath] = generatePath(__dirname, input);
 
     try {
       await decompress(filePath, destinationPath);
@@ -109,9 +99,7 @@ rl.on("line", async (input) => {
     }
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("cat ")) {
-    const filePath = path.isAbsolute(input.split(" ")[1])
-      ? input.split(" ")[1]
-      : path.join(__dirname, input.split(" ")[1]);
+    const [filePath] = generatePath(__dirname, input);
 
     try {
       await read(filePath);
@@ -120,8 +108,7 @@ rl.on("line", async (input) => {
     }
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("add ")) {
-    const fileName = input.split(" ")[1];
-    const filePath = path.join(__dirname, fileName);
+    const [filePath] = generatePath(__dirname, input);
 
     try {
       await addEmptyFile(filePath);
@@ -130,10 +117,8 @@ rl.on("line", async (input) => {
     }
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("rn ")) {
-    const oldPath = path.isAbsolute(input.split(" ")[1])
-      ? input.split(" ")[1]
-      : path.join(__dirname, input.split(" ")[1]);
-    const newFileName = input.split(" ")[2];
+    const [oldPath] = generatePath(__dirname, input);
+    const newFileName = parseInput(input)[2];
     const newPath = path.join(path.parse(oldPath).dir, newFileName);
 
     try {
@@ -143,12 +128,7 @@ rl.on("line", async (input) => {
     }
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("cp ")) {
-    const filePath = path.isAbsolute(input.split(" ")[1])
-      ? input.split(" ")[1]
-      : path.join(__dirname, input.split(" ")[1]);
-    const newDirectory = path.isAbsolute(input.split(" ")[2])
-      ? input.split(" ")[2]
-      : path.join(__dirname, input.split(" ")[2]);
+    const [filePath, newDirectory] = generatePath(__dirname, input);
     const newPath = path.join(newDirectory, path.parse(filePath).base);
 
     try {
@@ -158,9 +138,7 @@ rl.on("line", async (input) => {
     }
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("rm ")) {
-    const filePath = path.isAbsolute(input.split(" ")[1])
-      ? input.split(" ")[1]
-      : path.join(__dirname, input.split(" ")[1]);
+    const [filePath] = generatePath(__dirname, input);
 
     try {
       await removeFile(filePath);
@@ -169,12 +147,7 @@ rl.on("line", async (input) => {
     }
     console.log(`You are currently in ${__dirname}`);
   } else if (input.trim().startsWith("mv ")) {
-    const filePath = path.isAbsolute(input.split(" ")[1])
-      ? input.split(" ")[1]
-      : path.join(__dirname, input.split(" ")[1]);
-    const newDirectory = path.isAbsolute(input.split(" ")[2])
-      ? input.split(" ")[2]
-      : path.join(__dirname, input.split(" ")[2]);
+    const [filePath, newDirectory] = generatePath(__dirname, input);
     const newPath = path.join(newDirectory, path.parse(filePath).base);
 
     try {
