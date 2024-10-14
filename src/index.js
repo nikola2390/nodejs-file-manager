@@ -11,6 +11,7 @@ import { decompress } from "./decompress.js";
 import { read } from "./read.js";
 import { addEmptyFile } from "./addEmptyFile.js";
 import { renameFile } from "./renameFile.js";
+import { copyFile } from "./copyFile.js";
 
 // npm run start -- --username=ASDFGH
 
@@ -178,6 +179,21 @@ rl.on("line", async (input) => {
 
     try {
       await renameFile(oldPath, newPath);
+    } catch (error) {
+      console.error("Operation failed");
+    }
+    console.log(`You are currently in ${__dirname}`);
+  } else if (input.startsWith("cp ")) {
+    const filePath = path.isAbsolute(input.split(" ")[1])
+      ? input.split(" ")[1]
+      : path.join(__dirname, input.split(" ")[1]);
+    const newDirectory = path.isAbsolute(input.split(" ")[2])
+      ? input.split(" ")[2]
+      : path.join(__dirname, input.split(" ")[2]);
+    const newPath = path.join(newDirectory, path.parse(filePath).base);
+
+    try {
+      await copyFile(filePath, newPath);
     } catch (error) {
       console.error("Operation failed");
     }
