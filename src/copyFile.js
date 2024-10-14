@@ -1,4 +1,4 @@
-import { pipeline } from "stream/promises";
+import { pipeline } from "node:stream/promises";
 import { createReadStream, createWriteStream, existsSync } from "node:fs";
 
 export const copyFile = async (filePath, newPath) => {

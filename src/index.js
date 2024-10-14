@@ -1,10 +1,10 @@
 import { parseArguments } from "./parseArguments.js";
-import readline from "readline";
+import readline from "node:readline";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { homedir, EOL, userInfo, arch, cpus } from "os";
-import { readdir } from "fs/promises";
-import path from "path";
+import { homedir, EOL, userInfo, arch, cpus } from "node:os";
+import { readdir } from "node:fs/promises";
+import path from "node:path";
 import { calculateHash } from "./calcHash.js";
 import { compress } from "./compress.js";
 import { decompress } from "./decompress.js";

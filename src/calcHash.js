@@ -1,8 +1,8 @@
-import { createReadStream } from "fs";
-import { createHash } from "crypto";
-import { stdout } from "process";
-import { EOL } from "os";
-import { pipeline } from "stream/promises";
+import { createReadStream } from "node:fs";
+import { createHash } from "node:crypto";
+import { stdout } from "node:process";
+import { EOL } from "node:os";
+import { pipeline } from "node:stream/promises";
 
 export const calculateHash = async (filePath) => {
   const hash = createHash("sha256");
