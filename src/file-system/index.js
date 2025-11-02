@@ -4,3 +4,4 @@ export { moveFile } from "./moveFile.js";
 export { read } from "./read.js";
 export { removeFile } from "./removeFile.js";
 export { renameFile } from "./renameFile.js";
+export { mkNewDir } from "./mkNewDir.js";

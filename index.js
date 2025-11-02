@@ -14,6 +14,7 @@ import { list } from "./src/working-directory/index.js";
 import {
   addEmptyFile,
   copyFile,
+  mkNewDir,
   moveFile,
   read,
   removeFile,
@@ -119,6 +120,14 @@ rl.on("line", async (data) => {
 
     try {
       await addEmptyFile(filePath);
+    } catch (error) {
+      console.error("Operation failed");
+    }
+    console.log(`You are currently in ${__dirname}`);
+  } else if (input.trim().startsWith("mkdir ")) {
+    const [dirPath] = generatePath(__dirname, input);
+    try {
+      await mkNewDir(dirPath);
     } catch (error) {
       console.error("Operation failed");
     }
