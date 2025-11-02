@@ -3,7 +3,8 @@ import { homedir, EOL, userInfo, arch, cpus } from "node:os";
 export const operationSystemInfo = (command) => {
   switch (command) {
     case "eol":
-      console.log(EOL);
+      const endOfLine = EOL === "\n" ? "\\n" : "\\r\\n";
+      console.log(endOfLine);
       break;
     case "cpus":
       const processors = [];
